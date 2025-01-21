@@ -1,12 +1,5 @@
-<h1 style="color:Green;"> Operating System Lab Exercise</h1>
+<b><h1 style="color:Green;"> Operating System Lab Using Shell Programming </h1></b>
 
-<ol style="color:white;">
-<li>LRU
-<li>FIFO
-<li>Best-Fit
-<li>Worst-Fit
-<li>MFT
-</ol>
 
 <p>Shell programming in an operating system (OS) involves writing scripts or programs to automate tasks, manage processes, and perform operations using a shell, which is a command-line interface for interacting with the OS. The shell interprets user commands and scripts, sending them to the OS kernel for execution.,</p>
 
