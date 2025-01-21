@@ -1,0 +1,43 @@
+# Input for number of blocks and files
+read -p "Enter the number of blocks: " nb
+read -p "Enter the number of files: " nf
+# Input block sizes
+for (( i=0; i<nb; i++ )); do
+read -p "Enter the size of block $i: " b[$i]
+ba[$i]=0 # Block allocation flag
+done
+# Input file sizes
+for (( i=0; i<nf; i++ )); do
+read -p "Enter the size of file $i: " f[$i]
+done
+# Best Fit Allocation
+for (( i=0; i<nf; i++ )); do
+best_fit_index=-1
+smallest_fragment=99999
+for (( j=0; j<nb; j++ )); do
+temp_if=$((b[$j]-f[$i]))
+if [ $temp_if -ge 0 ] && [ $temp_if -lt $smallest_fragment ] && [ ${ba[$j]} -eq 0 ]; then
+smallest_fragment=$temp_if
+best_fit_index=$j
+fi
+done
+if [ $best_fit_index -ne -1 ]; then
+ba[$best_fit_index]=1
+highest_index[$i]=$best_fit_index
+fragment[$i]=$smallest_fragment
+else
+highest_index[$i]=-1
+fragment[$i]="N/A"
+fi
+done
+# Output results
+echo "F_no F_size B_no B_size Frag"
+
+for (( i=0; i<nf; i++ )); do
+if [ ${highest_index[$i]} -ne -1 ]; then
+echo "$i ${f[$i]} ${highest_index[$i]} ${b[${highest_index[$i]}]}
+${fragment[$i]}"
+else
+echo "$i ${f[$i]} Not Allocated - -"
+fi
+done

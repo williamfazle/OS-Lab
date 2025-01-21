@@ -1,0 +1,43 @@
+read -p "Enter the number of blocks: " nb
+read -p "Enter the number of files: " nf
+
+for (( i=0; i<nb; i++ ))
+do
+  read -p "Enter the size of block $i: " b[$i]
+  ba[$i]=0
+done
+
+
+for (( i=0; i<nf; i++ ))
+do
+  read -p "Enter the size of file $i: " f[$i]
+done
+
+highest=0
+
+for (( i=0; i<nf; i++ ))
+do
+   for (( j=0; j<nb; j++ ))
+   do
+     temp_if=$((b[$j]-f[$i]))
+     
+     if [ $temp_if -ge $highest ] && [ ${ba[$j]} == 0 ]
+     then
+        highest=$temp_if
+        highest_index[$i]=$j
+        
+     fi
+ 
+   done
+   ba[${highest_index[$i]}]=1
+   fragment[$i]=$highest
+   highest=0
+   
+done
+
+echo "F_no	F_size	B_no	B_size	Frag"
+
+for (( i=0; i<nf; i++ ))
+do
+  echo "$i	${f[$i]}	${highest_index[$i]}	${b[${highest_index[$i]}]}	${fragment[$i]}"
+done
