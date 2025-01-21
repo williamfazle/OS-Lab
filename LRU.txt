@@ -1,0 +1,63 @@
+read -p "Enter the number of pages: " np
+for (( i=0; i<np; i++ ))
+do
+read pages[$i]
+done
+read -p "Enter the number of frames: " nf
+for (( i=0; i<nf; i++ ))
+do
+frames[$i]=-1
+done
+hit=0
+miss=0
+access_order=() # To track the order of pages accessed
+for (( i=0; i<np; i++ ))
+do
+found=0
+for (( j=0; j<nf; j++ ))
+do
+if [ ${pages[$i]} == ${frames[$j]} ]
+then
+((hit++))
+echo "${frames[@]} Page hit no.$hit"
+# Move the accessed page to the most recent position
+access_order=($(echo "${access_order[@]/${pages[$i]}/}"))
+access_order+=(${pages[$i]})
+found=1
+break
+fi
+done
+if [ $found -eq 0 ]
+then
+((miss++))
+for (( j=0; j<nf; j++ ))
+do
+if [ ${frames[$j]} -eq -1 ]
+then
+frames[$j]=${pages[$i]}
+access_order+=(${pages[$i]})
+
+echo "${frames[@]} Page miss no.$miss"
+break
+fi
+done
+if [ $j -eq $nf ]
+then
+lru_page=${access_order[0]}
+lru_index=0
+for (( k=1; k<${#access_order[@]}; k++ ))
+do
+if [[ " ${access_order[@]} " =~ " ${frames[$k]} " ]]
+then
+lru_page=${frames[$k]}
+lru_index=$k
+break
+fi
+done
+frames[$lru_index]=${pages[$i]}
+access_order=($(echo "${access_order[@]/$lru_page/}"))
+access_order+=(${pages[$i]})
+echo "${frames[@]} Page miss no.$miss"
+fi
+fi
+done
