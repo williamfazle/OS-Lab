@@ -1,0 +1,41 @@
+read -p "Enter total available memory (in Bytes): " mem
+read -p "Enter block size (in Bytes): " bs
+
+read -p "Enter no. of process to allocate: " np
+for (( i=0; i<np; i++ ))
+do
+   read -p "Enter process $i th process size: " p[$i]
+done
+nb=$((mem/bs))
+tef=$((mem-nb*bs))
+tif=0
+
+for (( i=0; i<nb; i++ ))
+do
+   b[$i]=0
+done
+
+echo "PID	p_size	Allocation	IF"	
+for (( i=0; i<np; i++ ))
+do
+   for (( j=0; j<nb; j++ ))
+   do
+      if [ ${b[$j]} == 0 ] && [ $bs -ge ${p[$i]} ]
+      then
+          echo "$i	${p[$i]}	YES	$((bs-p[$i]))"
+          tif=$((tif + bs-p[$i]))
+          b[$j]=1
+          break		
+      fi 
+   done
+   
+   if [ $j == $nb ]
+   then
+        echo "$i	${p[$i]}	NO	---------"
+   fi
+done
+
+echo "Total internal fragmentation: " $tif
+echo "Total external fragmentation: " $tef
+
+
