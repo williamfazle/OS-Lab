@@ -1,6 +1,6 @@
-<h1 style="color:white;"> Operating System Lab Exercise</h1>
+<h1 style="color:Green;"> Operating System Lab Exercise</h1>
 
-<ol style="color:green;">
+<ol style="color:blue;">
 <li>LRU
 <li>FIFO
 <li>Best-Fit
